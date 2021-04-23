@@ -31,6 +31,7 @@ class GameBoard {
     this.boardMatrixString = this.setBoardMatrixString();
     this.myHeroPosition = this.getMyHeroPosition();
     this.colorizedBoardMatrixString = this.getColorizedBoardMatrixString();
+    L.l(this.myHeroPosition)
   }
 
   setBoardString(board) {
@@ -110,13 +111,9 @@ class GameBoard {
   getMyHeroPosition() {
     const heroSymbolsSet = this.boardSymbols.get("heroSymbolsSet");
     const boardString = this.boardString;
+    L.l(boardString);
     const regexp = new RegExp(`[\$\{heroSymbolsSet\}]`);
-
-    const help1 = boardString.match(regexp).index;
-    L.l(help1);
-    const returne = this.getMatrixYXPositionOf(help1);
-    return returne;
-    // return this.getMatrixYXPositionOf(boardString.match(regexp));
+    return this.getMatrixYXPositionOf(boardString.match(regexp).index);
   }
 
   getMatrixYXPositionOf(itemIndex) {
