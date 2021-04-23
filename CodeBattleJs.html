@@ -2,47 +2,42 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TEST</title>
+    <link rel="stylesheet" href="style.css" />
     <script src="Elements.js"></script>
     <script src="Point.js"></script>
     <script src="Utils.js"></script>
     <script src="GameClient.js"></script>
     <script src="LoderunnerBoard.js"></script>
-    <script src="GetMap.js"></script>
+    <script src="GameBoard.js"></script>
     <script src="OrderGiver.js"></script>
   </head>
   <body id="body">
-    <div style="display: flex; height: 100%">
+    <div class="game-monitor__container" style="display: flex; height: 100%">
       <textarea
+        class="game-monitor__order-panel"
         id="text"
         readonly="true"
-        style="display: inline-block; width: 15%; height: 100%; resize: none"
       ></textarea>
-      <p
-        id="boardViewer"
-        style="
-          width: 40%;
-          height: 100%;
-          align-self: start;
-          font-size: 1em;
-          font-family: monospace;
-          margin: 0 10px;
-          border: 1px solid lightgray;
-          padding: 0 2px;
-          white-space: pre;
-          resize: none;
-        "
-      ></p>
-      <textarea
-        id="otherViewer"
-        readonly="true"
-        style="
-          display: inline-block;
-          width: 40%;
-          height: 100%;
-          resize: none;
-          margin: 0 10px;
-        "
-      ></textarea>
+      <p class="game-monitor__board-view-panel" id="board-view-panel"></p>
+      <div class="game-monitor__side-panels">
+        <textarea
+          class="game-monitor__help-panel"
+          id="help-panel"
+          readonly="true"
+        ></textarea>
+        <button
+          class="game-monitor__btn_clear_log"
+          id="btn_clear_log"
+          type="button"
+        >
+          Clear log
+        </button>
+        <textarea
+          class="game-monitor__log-panel"
+          id="log-panel"
+          readonly="true"
+        ></textarea>
+      </div>
     </div>
 
     <script type="text/javascript">
@@ -60,24 +55,41 @@
       var gcb = new GameClient(
         "https://dojorena.io/codenjoy-contest/board/player/dojorena306?code=8752013741028701087&gameName=loderunner"
       );
-      let orderGiver = new OrderGiver();
-      let counter = 0;
+      const orderGiver = new OrderGiver();
+      const gameBoard = new GameBoard();
 
-      
+      let counter = 0;
+      document.getElementById(
+        "log-panel"
+      ).value = `---------------------------------------------- ${counter + 1}`;
+      document
+        .getElementById("btn_clear_log")
+        .addEventListener(
+          "click",
+          () => (document.getElementById("log-panel").value = "")
+        );
       document.getElementById("text").value = "Reload!" + "\n";
       gcb.textArea = text;
-      
+
       gcb.run(function (board) {
         counter++;
-        if (counter === 35) {
+        if (counter === 30) {
           document.getElementById("text").value = "Reload!" + "\n";
           counter = 0;
         }
-        
-        let gameBoard = new GameBoard(board);
-        document.getElementById("boardViewer").innerHTML = board._board2d;
-        
-        document.getElementById("otherViewer").value = counter; //================
+
+        if (gameBoard.initialBoard == "") {
+          gameBoard.initializeBoard(board);
+        }
+
+        gameBoard.refreshBoard(board);
+
+        document.getElementById("board-view-panel").innerHTML =
+          gameBoard.colorizedBoardMatrixString;
+
+        document.getElementById("help-panel").value = counter; //================
+
+        L.l(`\n---------------------------------------------- ${counter + 1}`);
         return orderGiver.finalOrder;
       });
     </script>

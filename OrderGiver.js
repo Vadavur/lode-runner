@@ -16,7 +16,6 @@ class OrderGiver {
     };
   }
 
-
   takeBoard(board){
     this.board = board;
   }
@@ -28,4 +27,9 @@ class OrderGiver {
 
 }
 
-// document.getElementById('otherViewer').innerHTML = gameBoard.boardMatrixString;//================
+// lazy logger class
+class L{
+  static l (log){
+    document.getElementById('log-panel').value += '\n' + log;
+  }
+}
