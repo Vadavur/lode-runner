@@ -6,19 +6,22 @@ class GameBoard {
       ["brickSymbolsString", "#*4321X"],
       ["environmentSymbolsString", " #H~☼"],
       ["heroSymbolsString", "ѠЯRY◄►[]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝"],
+      ["goldSymbolsString", "$&@"],
     ]);
-    this.boardStartString = this.setBoardString(board);
+    this.initialBoard = board;
+    this.boardStartString = this.setBoardString(board._boardString);
     this.boardWidth = this.setBoardWidth();
     this.boardHeight = this.setBoardHeight();
     this.boardStartMatrix = this.setBoardMatrix(this.boardStartString);
     this.boardMapMatrix = this.setBoardMapMatrix();
     this.boardString = this.boardStartString;
     this.boardMatrix = this.boardStartMatrix;
+    this.boardMatrixString = this.setBoardMatrixString();
     this.myHeroPosition = this.getMyHeroPosition();
   }
 
   setBoardString(board) {
-    return board.slice(6);
+    return board.slice(0);
   }
 
   setBoardWidth() {
@@ -44,7 +47,7 @@ class GameBoard {
       }
 
       boardMatrix[k][j] = boardArray[i];
-      j--;
+      j++;
     }
 
     return boardMatrix;
@@ -79,23 +82,35 @@ class GameBoard {
   }
 
   setCurrentBoardState(board) {
-    this.boardString = this.setBoardString(board);
+    this.boardString = this.setBoardString(board._boardString);
     this.boardMatrix = this.setBoardMatrix(this.boardString);
   }
 
-  getItemPosInMatrix(itemIndex) {
+  setBoardMatrixString() {
+    return this.boardString.match(new RegExp(`.{${this.boardWidth}}`,"g"))?.join('\n');
+  }
+  
+  getMyHeroPosition() {
+    const heroSymbolsString = this.boardSymbolsMap.get("heroSymbolsString");
+    const boardString = this.boardString;
+    const regexp = new RegExp(`[\$\{heroSymbolsString\}]`);
+    return this.getMatrixYXPositionOf(boardString.match(regexp));
+  }
+
+  getMatrixYXPositionOf(itemIndex) {
     const yValue = this.boardHeight - Math.ceil(itemIndex / this.boardWidth);
     const xValue = itemIndex % this.boardWidth;
     return [yValue, xValue];
   }
 
-  getMyHeroPosition() {
-    const heroSymbolsString = this.boardSymbolsMap.get("heroSymbolsString");
-    const regexp = new RegExp(`[${heroSymbolsString}]`);
-    return getItemPosInMatrix(this.boardString.match(regexp).index);
-  }
+
+
 }
 
-const gameBoard = new GameBoard(board);
+// document.getElementById('otherViewer').value = '4323';
+// const gameBoard = new GameBoard(board);
 
-gameBoard.setCurrentBoardState(board);
+// gameBoard.setCurrentBoardState(board);
+
+
+

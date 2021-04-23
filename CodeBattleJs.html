@@ -1,34 +1,85 @@
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>TEST</title>
-  <script src="Elements.js"></script>
-  <script src="Point.js"></script>
-  <script src="Utils.js"></script>
-  <script src="GameClient.js"></script>
-  <script src="LoderunnerBoard.js"></script>
-</head>
-<body id="body">
-  <textarea id="text" readonly=true style="display: block; width: 100%; height: 100%; resize: none;"></textarea>
-  
-  <script type="text/javascript">
-    var ACTIONS = {
-      GO_LEFT: 'left',
-      GO_RIGHT: 'right',
-      GO_UP: 'up',
-      GO_DOWN: 'down',
-      DRILL_LEFT: 'act,left',
-      DRILL_RIGHT: 'act,right',
-      SUICIDE: 'act(0)',
-      DO_NOTHING: 'stop'
-    };
-    
-    var gcb = new GameClient("https://dojorena.io/codenjoy-contest/board/player/dojorena306?code=8752013741028701087&gameName=loderunner")
-    gcb.textArea = text;
-    gcb.run(function(board) {
-      var random = Math.floor(Math.random() * Object.keys(ACTIONS).length);
-      return ACTIONS[Object.keys(ACTIONS)[random]];
-    });
-  </script>
-</body>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TEST</title>
+    <script src="Elements.js"></script>
+    <script src="Point.js"></script>
+    <script src="Utils.js"></script>
+    <script src="GameClient.js"></script>
+    <script src="LoderunnerBoard.js"></script>
+    <script src="GetMap.js"></script>
+    <script src="OrderGiver.js"></script>
+  </head>
+  <body id="body">
+    <div style="display: flex; height: 100%">
+      <textarea
+        id="text"
+        readonly="true"
+        style="display: inline-block; width: 15%; height: 100%; resize: none"
+      ></textarea>
+      <p
+        id="boardViewer"
+        style="
+          width: 40%;
+          height: 100%;
+          align-self: start;
+          font-size: 1em;
+          font-family: monospace;
+          margin: 0 10px;
+          border: 1px solid lightgray;
+          padding: 0 2px;
+          white-space: pre;
+          resize: none;
+        "
+      ></p>
+      <textarea
+        id="otherViewer"
+        readonly="true"
+        style="
+          display: inline-block;
+          width: 40%;
+          height: 100%;
+          resize: none;
+          margin: 0 10px;
+        "
+      ></textarea>
+    </div>
+
+    <script type="text/javascript">
+      var ACTIONS = {
+        GO_LEFT: "left",
+        GO_RIGHT: "right",
+        GO_UP: "up",
+        GO_DOWN: "down",
+        DRILL_LEFT: "act,left",
+        DRILL_RIGHT: "act,right",
+        SUICIDE: "act(0)",
+        DO_NOTHING: "stop",
+      };
+
+      var gcb = new GameClient(
+        "https://dojorena.io/codenjoy-contest/board/player/dojorena306?code=8752013741028701087&gameName=loderunner"
+      );
+      let orderGiver = new OrderGiver();
+      let counter = 0;
+
+      
+      document.getElementById("text").value = "Reload!" + "\n";
+      gcb.textArea = text;
+      
+      gcb.run(function (board) {
+        counter++;
+        if (counter === 35) {
+          document.getElementById("text").value = "Reload!" + "\n";
+          counter = 0;
+        }
+        
+        let gameBoard = new GameBoard(board);
+        document.getElementById("boardViewer").innerHTML = board._board2d;
+        
+        document.getElementById("otherViewer").value = counter; //================
+        return orderGiver.finalOrder;
+      });
+    </script>
+  </body>
 </html>
