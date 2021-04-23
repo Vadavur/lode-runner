@@ -21,12 +21,12 @@ class GameBoard {
     this.boardHeight = this.setBoardHeight();
     this.boardStartMatrix = this.setBoardMatrix(this.boardStartString);
     this.boardMapMatrix = this.setBoardMapMatrix();
-    // this.boardMapString = this.setBoardMapStringthis();
-    // L.l(this.boardMapString);
+    this.boardMapString = this.setBoardMapString();
   }
 
   refreshBoard(board) {
     this.boardString = this.setBoardString(board._boardString);
+    this.showOpenedDrillsOnBoardString();
     this.boardMatrix = this.setBoardMatrix(this.boardString);
     this.boardMatrixString = this.setBoardMatrixString();
     this.myHeroPosition = this.getMyHeroPosition();
@@ -111,7 +111,12 @@ class GameBoard {
     const heroSymbolsSet = this.boardSymbols.get("heroSymbolsSet");
     const boardString = this.boardString;
     const regexp = new RegExp(`[\$\{heroSymbolsSet\}]`);
-    return this.getMatrixYXPositionOf(boardString.match(regexp));
+
+    const help1 = boardString.match(regexp).index;
+    L.l(help1);
+    const returne = this.getMatrixYXPositionOf(help1);
+    return returne;
+    // return this.getMatrixYXPositionOf(boardString.match(regexp));
   }
 
   getMatrixYXPositionOf(itemIndex) {
@@ -170,11 +175,32 @@ class GameBoard {
     return colorizedBoardArray.join("");
   }
 
+  showOpenedDrillsOnBoardString() {
+    const boardStringArr = this.boardString.split("");
+    const boardMapStringArr = this.boardMapString.split("");
+    this.boardString = boardStringArr
+      .map((item, index) => {
+        if (boardMapStringArr[index] === "#" && item === " ") {
+          item = "V";
+          return item;
+        }
+        if (boardMapStringArr[index] === " " && item === "#") {
+          boardMapStringArr[index] = "#";
+          return item;
+        }
+        return item;
+      })
+      .join("");
+    this.boardMapString = boardMapStringArr.join("");
+  }
+
   setBoardMapString() {
-    let a = this.boardMapMatrix.map((item) => {
-      return item.join("");
-    });
-    return a.join("");
+    return this.boardMapMatrix
+      .reduceRight((arr, item) => {
+        arr.push(item.join(""));
+        return arr;
+      }, [])
+      .join("");
   }
 }
 

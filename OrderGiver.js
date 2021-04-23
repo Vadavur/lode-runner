@@ -2,8 +2,8 @@ class OrderGiver {
   constructor() {
     // this.initialBoard = board;
     // this.gameBoard = new GameBoard(board);
-    this.finalOrder = "stop";
-    this.orders = {
+    this.orders = [];
+    this.orderList = {
       GO_LEFT: "left",
       GO_RIGHT: "right",
       GO_UP: "up",
@@ -16,20 +16,23 @@ class OrderGiver {
     };
   }
 
-  takeBoard(board){
+  takeBoard(board) {
     this.board = board;
   }
-  // getAimsList(){
-  //   this.gameBoard
-  // }
 
-
-
-}
-
-// lazy logger class
-class L{
-  static l (log){
-    document.getElementById('log-panel').value += '\n' + log;
+  formFinalOrder() {
+    // this.orders = ["right", "act,right", "right"];
+    this.orders = [
+      "left",
+      "left",
+      "left",
+      "left",
+      "left",
+      "left",
+      "left",
+      "up",
+      "up",
+      "right",
+    ].reverse();
   }
 }

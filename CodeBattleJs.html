@@ -8,9 +8,13 @@
     <script src="Utils.js"></script>
     <script src="GameClient.js"></script>
     <script src="LoderunnerBoard.js"></script>
+    <script src="HelpClasses.js"></script>
     <script src="GameBoard.js"></script>
     <script src="OrderGiver.js"></script>
+    <script src="Routes.js"></script>
+    <script src="Hero.js"></script>
   </head>
+
   <body id="body">
     <div class="game-monitor__container" style="display: flex; height: 100%">
       <textarea
@@ -41,56 +45,43 @@
     </div>
 
     <script type="text/javascript">
-      var ACTIONS = {
-        GO_LEFT: "left",
-        GO_RIGHT: "right",
-        GO_UP: "up",
-        GO_DOWN: "down",
-        DRILL_LEFT: "act,left",
-        DRILL_RIGHT: "act,right",
-        SUICIDE: "act(0)",
-        DO_NOTHING: "stop",
-      };
-
       var gcb = new GameClient(
         "https://dojorena.io/codenjoy-contest/board/player/dojorena306?code=8752013741028701087&gameName=loderunner"
       );
-      const orderGiver = new OrderGiver();
       const gameBoard = new GameBoard();
+      const orderGiver = new OrderGiver();
+      const hero = new Hero();
+      const clearLog = clearLogButtonListener();
+      const keyboardController = new KeyboardController();
 
       let counter = 0;
       document.getElementById(
         "log-panel"
-      ).value = `---------------------------------------------- ${counter + 1}`;
-      document
-        .getElementById("btn_clear_log")
-        .addEventListener(
-          "click",
-          () => (document.getElementById("log-panel").value = "")
-        );
+      ).value = `---------------------------------------------- ${counter}`;
+
       document.getElementById("text").value = "Reload!" + "\n";
       gcb.textArea = text;
 
       gcb.run(function (board) {
+        L.l(`\n---------------------------------------------- ${counter + 1}`);
         counter++;
         if (counter === 30) {
           document.getElementById("text").value = "Reload!" + "\n";
           counter = 0;
         }
+        document.getElementById("help-panel").value = counter; //================
 
         if (gameBoard.initialBoard == "") {
           gameBoard.initializeBoard(board);
         }
-
         gameBoard.refreshBoard(board);
-
         document.getElementById("board-view-panel").innerHTML =
           gameBoard.colorizedBoardMatrixString;
-
-        document.getElementById("help-panel").value = counter; //================
-
-        L.l(`\n---------------------------------------------- ${counter + 1}`);
-        return orderGiver.finalOrder;
+        if (!hero.onMission) orderGiver.formFinalOrder();
+        hero.getOrders(orderGiver.orders);
+        L.l(gameBoard.myHeroPosition);
+        return keyboardController.releaseCommand();
+        // return hero.executeOrders();
       });
     </script>
   </body>
