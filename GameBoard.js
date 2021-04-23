@@ -21,6 +21,8 @@ class GameBoard {
     this.boardHeight = this.setBoardHeight();
     this.boardStartMatrix = this.setBoardMatrix(this.boardStartString);
     this.boardMapMatrix = this.setBoardMapMatrix();
+    // this.boardMapString = this.setBoardMapStringthis();
+    // L.l(this.boardMapString);
   }
 
   refreshBoard(board) {
@@ -69,29 +71,28 @@ class GameBoard {
     const pipeSymbolsSet = this.boardSymbols.get("pipeSymbolsSet");
     const brickSymbolsSet = this.boardSymbols.get("brickSymbolsSet");
 
-    L.l(this.boardStartMatrix);
+    const boardMapMatrix = this.boardStartMatrix.map((itemY) => {
+      return itemY.map((itemX) => {
+        if (ladderSymbolsSet.includes(itemX)) {
+          itemX = "H";
+          return itemX;
+        }
+        if (pipeSymbolsSet.includes(itemX)) {
+          itemX = "~";
+          return itemX;
+        }
+        if (brickSymbolsSet.includes(itemX)) {
+          itemX = "#";
+          return itemX;
+        }
+        if (itemX === "☼") {
+          return itemX;
+        }
 
-    const boardMapMatrix = this.boardStartMatrix.map((item) => {
-      if (ladderSymbolsSet.includes(item)) {
-        item = "H";
-        return item;
-      }
-      if (pipeSymbolsSet.includes(item)) {
-        item = "~";
-        return item;
-      }
-      if (brickSymbolsSet.includes(item)) {
-        item = "#";
-        return item;
-      }
-      if (item === "☼") {
-        return item;
-      }
-      
-      item = " ";
-      return item;
+        itemX = " ";
+        return itemX;
+      });
     });
-L.l(boardMapMatrix)
     return boardMapMatrix;
   }
 
@@ -155,26 +156,25 @@ L.l(boardMapMatrix)
       "",
       "orange"
     );
-    
+
     colorizedBoardArray = colorizeSymbols(
       this.boardSymbols.get("otherHeroSymbolsSet"),
       "",
       "lightblue"
     );
-    
-    colorizedBoardArray = colorizeSymbols(
-      "☼",
-      "",
-      "#102200"
-    );
 
-    colorizedBoardArray = colorizeSymbols(
-      "#",
-      "",
-      ""
-    );
+    colorizedBoardArray = colorizeSymbols("☼", "", "#102200");
+
+    colorizedBoardArray = colorizeSymbols("#", "", "grey");
 
     return colorizedBoardArray.join("");
+  }
+
+  setBoardMapString() {
+    let a = this.boardMapMatrix.map((item) => {
+      return item.join("");
+    });
+    return a.join("");
   }
 }
 
