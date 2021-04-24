@@ -106,25 +106,6 @@ class GameBoard {
     this.boardMapString = boardMapStringArr.join("");
   }
 
-  // showDrillsStatusOnBoardString() {
-  //   const boardStringArr = this.boardString.split("");
-  //   const boardMapStringArr = this.boardMapString.split("");
-  //   this.boardString = boardStringArr
-  //     .map((item, index) => {
-  //       if (boardMapStringArr[index] === "#" && item === " ") {
-  //         item = "V";
-  //         return item;
-  //       }
-  //       if (boardMapStringArr[index] === " " && item === "#") {
-  //         boardMapStringArr[index] = "#";
-  //         return item;
-  //       }
-  //       return item;
-  //     })
-  //     .join("");
-  //   this.boardMapString = boardMapStringArr.join("");
-  // }
-
   setBoardMatrix(boardString) {
     const boardWidth = this.boardWidth;
     const boardArray = boardString.split("");
@@ -167,18 +148,8 @@ class GameBoard {
   }
 
   getColorizedBoardMatrixString() {
-    function colorizeSymbols(symbolsSet, color, bgColor) {
-      return colorizedBoardArray.map((item) => {
-        if (symbolsSet.includes(item)) {
-          item = `<span style="color: ${
-            color || "inherit"
-          }; background-color: ${bgColor || "inherit"}">${item}</span>`;
-        }
-        return item;
-      });
-    }
-
     let colorizedBoardArray = this.boardMatrixString.split("");
+
     colorizedBoardArray = colorizeSymbols(
       this.boardSymbols.get("heroSymbolsSet"),
       "",
@@ -210,9 +181,28 @@ class GameBoard {
     );
 
     colorizedBoardArray = colorizeSymbols("☼", "", "#102200");
-
     colorizedBoardArray = colorizeSymbols("#", "", "grey");
+    colorizedBoardArray = colorizeSymbols("⊛", "", "purple");
+    colorizedBoardArray = colorizeSymbols("S", "", "blue");
 
+    function colorizeSymbols(symbolsSet, color, bgColor) {
+      return colorizedBoardArray.map((item) => {
+        if (symbolsSet.includes(item)) {
+          item = `<span style="color: ${
+            color || "inherit"
+          }; background-color: ${bgColor || "inherit"}">${item}</span>`;
+        }
+        return item;
+      });
+    }
     return colorizedBoardArray.join("");
+  }
+
+  getBoardItemInPosition(coordY, coordX) {
+    return this.boardMatrix[coordY][coordX];
+  }
+
+  getMapItemInPosition(coordY, coordX) {
+    return this.boardMatrix[coordY][coordX];
   }
 }
