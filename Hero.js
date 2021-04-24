@@ -1,8 +1,8 @@
 class Hero {
   constructor() {
-    this.orders = [];
+    this.order = [];
     this.onMission = false;
-    this.orderList = {
+    this.commandsList = {
       GO_LEFT: "left",
       GO_RIGHT: "right",
       GO_UP: "up",
@@ -15,9 +15,9 @@ class Hero {
     };
   }
 
-  getOrders(orders) {
+  getOrder(order) {
     if (this.onMission) return;
-    this.orders = orders;
+    this.order = order;
     this.onMission = true;    
   }
   
@@ -27,7 +27,7 @@ class Hero {
   }
 
   executeOrders() {
-    return this.orders.pop() || this.missionCompleted();
+    return this.order.pop() || this.missionCompleted();
   }
 }
 

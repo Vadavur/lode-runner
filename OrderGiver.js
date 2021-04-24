@@ -2,8 +2,8 @@ class OrderGiver {
   constructor() {
     // this.initialBoard = board;
     // this.gameBoard = new GameBoard(board);
-    this.orders = [];
-    this.orderList = {
+    this.order = [];
+    this.commandsList = {
       GO_LEFT: "left",
       GO_RIGHT: "right",
       GO_UP: "up",
@@ -20,9 +20,9 @@ class OrderGiver {
     this.board = board;
   }
 
-  formFinalOrder() {
+  formOrder() {
     // this.orders = ["right", "act,right", "right"];
-    this.orders = [
+    this.order = [
       "left",
       "left",
       "left",

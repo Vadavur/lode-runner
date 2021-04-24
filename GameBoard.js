@@ -3,7 +3,7 @@ class GameBoard {
     this.boardSymbols = new Map([
       ["ladderSymbolsSet", "HY⍬U⋕⋊Q"],
       ["pipeSymbolsSet", "~{}⋜⋝ЭЄ⊣⊢<>"],
-      ["brickSymbolsSet", "#*4321X"],
+      ["brickSymbolsSet", "#*987654321X"],
       ["environmentSymbolsSet", " #H~☼"],
       ["heroSymbolsSet", "ѠЯRY◄►[]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝"],
       ["goldSymbolsSet", "$&@"],
@@ -31,7 +31,7 @@ class GameBoard {
     this.boardMatrixString = this.setBoardMatrixString();
     this.myHeroPosition = this.getMyHeroPosition();
     this.colorizedBoardMatrixString = this.getColorizedBoardMatrixString();
-    L.l(this.myHeroPosition)
+    L.l(this.myHeroPosition);
   }
 
   setBoardString(board) {
@@ -109,11 +109,15 @@ class GameBoard {
   }
 
   getMyHeroPosition() {
-    const heroSymbolsSet = this.boardSymbols.get("heroSymbolsSet");
     const boardString = this.boardString;
-    L.l(boardString);
-    const regexp = new RegExp(`[\$\{heroSymbolsSet\}]`);
-    return this.getMatrixYXPositionOf(boardString.match(regexp).index);
+    // at first, i tried this one, but it always returned the same index but different strings, WHY?????????
+    // const heroSymbolsSet = this.boardSymbols.get("heroSymbolsSet");
+    // const regexp = new RegExp(`[\$\{heroSymbolsSet\}]`);
+    // let returne = boardString.match(regexp).index
+    // let returne = boardString.search(/[ѠЯRY◄►\[\]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝]/);
+    return this.getMatrixYXPositionOf(
+      boardString.search(/[ѠЯRY◄►\[\]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝]/),
+    );
   }
 
   getMatrixYXPositionOf(itemIndex) {

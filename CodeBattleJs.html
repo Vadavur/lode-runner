@@ -51,8 +51,8 @@
       const gameBoard = new GameBoard();
       const orderGiver = new OrderGiver();
       const hero = new Hero();
-      const clearLog = clearLogButtonListener();
-      const keyboardController = new KeyboardController();
+      const clearLogBtnOn = clearLogButtonListener();
+      const keyboardControllerOn = new KeyboardController();
 
       let counter = 0;
       document.getElementById(
@@ -77,9 +77,10 @@
         gameBoard.refreshBoard(board);
         document.getElementById("board-view-panel").innerHTML =
           gameBoard.colorizedBoardMatrixString;
-        if (!hero.onMission) orderGiver.formFinalOrder();
-        hero.getOrders(orderGiver.orders);
-        return keyboardController.releaseCommand();
+
+        if (!hero.onMission) orderGiver.formOrder();
+        hero.getOrder(orderGiver.order);
+        return keyboardControllerOn.releaseCommand();
         // return hero.executeOrders();
       });
     </script>
