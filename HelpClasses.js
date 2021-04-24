@@ -75,10 +75,10 @@ class Queue {
 
   enqueue(element) {
     if (this.length === 0) {
-      this.tail = new ListNode(element);
+      this.tail = new QueueNode(element);
       this.head = this.tail;
     } else {
-      this.tail.next = new ListNode(element);
+      this.tail.next = new QueueNode(element);
       this.tail = this.tail.next;
     }
     this.length++;
@@ -98,7 +98,17 @@ class Queue {
   }
 }
 
-function ListNode(x) {
+function duplicateQueue(origQueue) {
+  const newQueue = new Queue();
+  let item = origQueue.head;
+  while (item !== null) {
+    newQueue.enqueue(item.value);
+    item = item.next;
+  }
+  return newQueue;
+}
+
+function QueueNode(x) {
   this.value = x;
   this.next = null;
 }
@@ -131,3 +141,42 @@ class Observer {
     });
   }
 }
+
+
+// class PathsTree {
+//   constructor(myHeroPosition) {
+//     this.from = null;
+//     this.value = ["stop", myHeroPosition];
+//     this.left = null;
+//     this.right = null;
+//     this.down = null;
+//     this.up = null;
+//   }
+
+//   // get size() {
+//   //   return this.length;
+//   // }
+//   // this.right.addDirection
+
+//   addDirection(position, direction) {
+//     this.left = new PathNode([direction, position], )
+//   }
+
+//   // enqueue(element) {
+//   //   {
+//   //     this.tail.next = new QueueNode(element);
+//   //     this.tail = this.tail.next;
+//   //   }
+//   //   this.length++;
+//   // }
+
+// }
+
+// function PathNode(x, previous) {
+//   this.value = x;
+//   this.from = previous;
+//   this.left = null;
+//   this.right = null;
+//   this.down = null;
+//   this.up = null;
+// }

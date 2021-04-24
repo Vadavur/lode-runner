@@ -21,7 +21,7 @@ class GameBoard {
     this.boardHeight = this.setBoardHeight();
     this.boardMapString = this.setBoardMapString();
     this.boardMapMatrix = this.setBoardMatrix(this.boardMapString);
-    L.l("OOOOkkkkkkk");
+    // L.l("OOOOkkkkkkk");
   }
 
   refreshBoard(board) {

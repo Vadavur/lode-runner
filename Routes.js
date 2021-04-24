@@ -13,6 +13,7 @@ class Routes {
 
     paths[0] = new Queue();
     paths[0].enqueue(["stop", myHeroPosition]);
+
     while (!gotPlan) {
       paths.forEach((pathQueue, index) => {
         let currentPlaceHero = pathQueue.tail[1];
@@ -32,8 +33,9 @@ class Routes {
 
         if (currentPlaceHero.canGoRight(this.board)) {
           if (gotDirection) {
-            const newPath = new Queue();
-            paths.push(new Queue)
+            const newPath = duplicateQueue(pathQueue);
+            newPath.tail.value = ["right", [currentPlaceY, currentPlaceX + 1]];
+            paths.push(newPath);
           } else {
             pathQueue.enqueue(["right", [currentPlaceY, currentPlaceX + 1]]);
             gotDirection = true;
@@ -41,12 +43,24 @@ class Routes {
         }
 
         if (currentPlaceHero.canGoDown(this.board)) {
-          pathQueue.enqueue(["down", [currentPlaceY - 1, currentPlaceX]]);
-          gotDirection = true;
+          if (gotDirection) {
+            const newPath = duplicateQueue(pathQueue);
+            newPath.tail.value = ["down", [currentPlaceY - 1, currentPlaceX]];
+            paths.push(newPath);
+          } else {
+            pathQueue.enqueue(["down", [currentPlaceY - 1, currentPlaceX]]);
+            gotDirection = true;
+          }
         }
 
         if (currentPlaceHero.canGoUp(this.board)) {
-          pathQueue.enqueue(["up", [currentPlaceY + 1, currentPlaceX]]);
+          if (gotDirection) {
+            const newPath = duplicateQueue(pathQueue);
+            newPath.tail.value = ["up", [currentPlaceY + 1, currentPlaceX]];
+            paths.push(newPath);
+          } else {
+            pathQueue.enqueue(["up", [currentPlaceY + 1, currentPlaceX]]);
+          }
         }
       });
     }

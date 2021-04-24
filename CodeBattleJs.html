@@ -53,13 +53,13 @@
       const hero = new Hero();
       const keyboardControllerOn = new KeyboardController();
       const observer = new Observer();
-
+      
       gcb.textArea = text;
-
+      
       gcb.run(function (board) {
+        // L.l("OOOOkkkkkkk");
         observer.nextStep();
         
-        // L.l("OOOOkkkkkkk");
         if (gameBoard.initialBoard == "") {
           gameBoard.initializeBoard(board);
         }
