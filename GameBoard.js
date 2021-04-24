@@ -16,17 +16,17 @@ class GameBoard {
 
   initializeBoard(board) {
     this.initialBoard = board;
-    this.boardStartString = this.setBoardString(board._boardString);
+    this.initialBoardString = board._boardString;
     this.boardWidth = this.setBoardWidth();
     this.boardHeight = this.setBoardHeight();
-    this.boardStartMatrix = this.setBoardMatrix(this.boardStartString);
-    this.boardMapMatrix = this.setBoardMapMatrix();
     this.boardMapString = this.setBoardMapString();
+    this.boardMapMatrix = this.setBoardMatrix(this.boardMapString);
+    L.l("OOOOkkkkkkk");
   }
 
   refreshBoard(board) {
-    this.boardString = this.setBoardString(board._boardString);
-    this.showOpenedDrillsOnBoardString();
+    this.boardString = board._boardString;
+    this.showDrillsStatusOnBoardString();
     this.boardMatrix = this.setBoardMatrix(this.boardString);
     this.boardMatrixString = this.setBoardMatrixString();
     this.myHeroPosition = this.getMyHeroPosition();
@@ -34,16 +34,57 @@ class GameBoard {
     L.l(this.myHeroPosition);
   }
 
-  setBoardString(board) {
-    return board.slice(0);
-  }
-
   setBoardWidth() {
-    return Math.sqrt(this.boardStartString.length);
+    return Math.sqrt(this.initialBoardString.length);
   }
 
   setBoardHeight() {
-    return this.boardStartString.length / this.boardWidth;
+    return this.initialBoardString.length / this.boardWidth;
+  }
+
+  setBoardMapString() {
+    const ladderSymbolsSet = this.boardSymbols.get("ladderSymbolsSet");
+    const pipeSymbolsSet = this.boardSymbols.get("pipeSymbolsSet");
+    const brickSymbolsSet = this.boardSymbols.get("brickSymbolsSet");
+
+    return this.initialBoardString
+      .split("")
+      .map((item) => {
+        if (ladderSymbolsSet.includes(item)) {
+          item = "H";
+          return item;
+        }
+        if (pipeSymbolsSet.includes(item)) {
+          item = "~";
+          return item;
+        }
+        if (brickSymbolsSet.includes(item) || item === "☼") {
+          return item;
+        }
+
+        item = " ";
+        return item;
+      })
+      .join("");
+  }
+
+  showDrillsStatusOnBoardString() {
+    const boardStringArr = this.boardString.split("");
+    const boardMapStringArr = this.boardMapString.split("");
+    this.boardString = boardStringArr
+      .map((item, index) => {
+        if (boardMapStringArr[index] === "#" && item === " ") {
+          item = "V";
+          return item;
+        }
+        if (boardMapStringArr[index] === " " && item === "#") {
+          boardMapStringArr[index] = "#";
+          return item;
+        }
+        return item;
+      })
+      .join("");
+    this.boardMapString = boardMapStringArr.join("");
   }
 
   setBoardMatrix(boardString) {
@@ -67,41 +108,6 @@ class GameBoard {
     return boardMatrix;
   }
 
-  setBoardMapMatrix() {
-    const ladderSymbolsSet = this.boardSymbols.get("ladderSymbolsSet");
-    const pipeSymbolsSet = this.boardSymbols.get("pipeSymbolsSet");
-    const brickSymbolsSet = this.boardSymbols.get("brickSymbolsSet");
-
-    const boardMapMatrix = this.boardStartMatrix.map((itemY) => {
-      return itemY.map((itemX) => {
-        if (ladderSymbolsSet.includes(itemX)) {
-          itemX = "H";
-          return itemX;
-        }
-        if (pipeSymbolsSet.includes(itemX)) {
-          itemX = "~";
-          return itemX;
-        }
-        if (brickSymbolsSet.includes(itemX)) {
-          itemX = "#";
-          return itemX;
-        }
-        if (itemX === "☼") {
-          return itemX;
-        }
-
-        itemX = " ";
-        return itemX;
-      });
-    });
-    return boardMapMatrix;
-  }
-
-  setCurrentBoardState(board) {
-    this.boardString = this.setBoardString(board._boardString);
-    this.boardMatrix = this.setBoardMatrix(this.boardString);
-  }
-
   setBoardMatrixString() {
     return this.boardString
       .match(new RegExp(`.{${this.boardWidth}}`, "g"))
@@ -110,13 +116,9 @@ class GameBoard {
 
   getMyHeroPosition() {
     const boardString = this.boardString;
-    // at first, i tried this one, but it always returned the same index but different strings, WHY?????????
-    // const heroSymbolsSet = this.boardSymbols.get("heroSymbolsSet");
-    // const regexp = new RegExp(`[\$\{heroSymbolsSet\}]`);
-    // let returne = boardString.match(regexp).index
-    // let returne = boardString.search(/[ѠЯRY◄►\[\]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝]/);
+
     return this.getMatrixYXPositionOf(
-      boardString.search(/[ѠЯRY◄►\[\]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝]/),
+      boardString.search(/[ѠЯRY◄►\[\]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝]/)
     );
   }
 
@@ -175,37 +177,4 @@ class GameBoard {
 
     return colorizedBoardArray.join("");
   }
-
-  showOpenedDrillsOnBoardString() {
-    const boardStringArr = this.boardString.split("");
-    const boardMapStringArr = this.boardMapString.split("");
-    this.boardString = boardStringArr
-      .map((item, index) => {
-        if (boardMapStringArr[index] === "#" && item === " ") {
-          item = "V";
-          return item;
-        }
-        if (boardMapStringArr[index] === " " && item === "#") {
-          boardMapStringArr[index] = "#";
-          return item;
-        }
-        return item;
-      })
-      .join("");
-    this.boardMapString = boardMapStringArr.join("");
-  }
-
-  setBoardMapString() {
-    return this.boardMapMatrix
-      .reduceRight((arr, item) => {
-        arr.push(item.join(""));
-        return arr;
-      }, [])
-      .join("");
-  }
 }
-
-// document.getElementById('otherViewer').value = '4323';
-// const gameBoard = new GameBoard(board);
-
-// gameBoard.setCurrentBoardState(board);

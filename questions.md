@@ -25,6 +25,10 @@ dojoarena.io/events/193
 
 Start to play появляется 
 
+('$') +3 YELLOW_GOLD
+('@') +5 RED_GOLD
+('&') +1 GREEN_GOLD
+
 зеленое +1
 желтое +3
 красное +5

@@ -34,7 +34,7 @@
           id="btn_clear_log"
           type="button"
         >
-          Clear log
+          Clear all logs
         </button>
         <textarea
           class="game-monitor__log-panel"
@@ -51,26 +51,15 @@
       const gameBoard = new GameBoard();
       const orderGiver = new OrderGiver();
       const hero = new Hero();
-      const clearLogBtnOn = clearLogButtonListener();
       const keyboardControllerOn = new KeyboardController();
+      const observer = new Observer();
 
-      let counter = 0;
-      document.getElementById(
-        "log-panel"
-      ).value = `---------------------------------------------- ${counter}`;
-
-      document.getElementById("text").value = "Reload!" + "\n";
       gcb.textArea = text;
 
       gcb.run(function (board) {
-        L.l(`\n---------------------------------------------- ${counter + 1}`);
-        counter++;
-        if (counter === 30) {
-          document.getElementById("text").value = "Reload!" + "\n";
-          counter = 0;
-        }
-        document.getElementById("help-panel").value = counter; //================
-
+        observer.nextStep();
+        
+        // L.l("OOOOkkkkkkk");
         if (gameBoard.initialBoard == "") {
           gameBoard.initializeBoard(board);
         }

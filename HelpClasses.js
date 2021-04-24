@@ -6,11 +6,6 @@ class L {
 }
 
 // activates btn to clear logs
-function clearLogButtonListener() {
-  document.getElementById("btn_clear_log").addEventListener("click", () => {
-    document.getElementById("log-panel").value = "";
-  });
-}
 
 // activates keabord control for testing
 class KeyboardController {
@@ -54,7 +49,7 @@ class KeyboardController {
           break;
         case "KeyX":
           this.keyboardCommand = new Queue();
-          command = ""
+          command = "";
           return;
 
         default:
@@ -106,4 +101,33 @@ class Queue {
 function ListNode(x) {
   this.value = x;
   this.next = null;
+}
+
+class Observer {
+  constructor() {
+    this.counter = 0;
+    this.startObserving();
+    this.clearAllLogsButtonListener();
+  }
+
+  // const clearLogBtnOn = clearLogButtonListener();
+
+  startObserving() {
+    this.counter = 0;
+    document.getElementById("log-panel").value = "";
+    document.getElementById("text").value = "Reload!" + "\n";
+    document.getElementById("help-panel").value = "Initializing...";
+  }
+
+  nextStep() {
+    this.counter++;
+    document.getElementById("help-panel").value = this.counter;
+    L.l(`\n---------------------------------------------- ${this.counter}`);
+  }
+
+  clearAllLogsButtonListener() {
+    document.getElementById("btn_clear_log").addEventListener("click", () => {
+      this.startObserving();
+    });
+  }
 }

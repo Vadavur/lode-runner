@@ -6,9 +6,9 @@
 ('1') PIT_FILL_1
 ('☼') UNDESTROYABLE_WALL
 ('*') DRILL_PIT
-('$') YELLOW_GOLD
-('@') RED_GOLD
-('&') GREEN_GOLD
+('$') YELLOW_GOLD +3
+('@') RED_GOLD +5
+('&') GREEN_GOLD +1
 ('H') LADDER
 ('~') PIPE
 ('Ѡ') HERO_DIE         // Герой переживает процесс умирания
