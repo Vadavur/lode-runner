@@ -3,13 +3,13 @@ class GameBoard {
     this.boardSymbols = new Map([
       ["ladderSymbolsSet", "HY⍬U⋕⋊Q"],
       ["pipeSymbolsSet", "~{}⋜⋝ЭЄ⊣⊢<>"],
-      ["brickSymbolsSet", "#*987654321X"],
+      ["brickSymbolsSet", "#*X123456789ABVW"],
       ["environmentSymbolsSet", " #H~☼"],
       ["heroSymbolsSet", "ѠЯRY◄►[]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝"],
       ["goldSymbolsSet", "$&@"],
       ["dangerSymbolsSet", "<>Z⋈⋰⋱⋊⋉⋕⋣⋢⊣⊢Q«»"],
       ["otherHeroSymbolsSet", "⌋⌊U)(⊐⊏ЭЄ"],
-      ["drillSymbolsSet", "*X1234VW"],
+      ["drillSymbolsSet", "*X123456789ABVW"],
     ]);
     this.initialBoard = "";
   }
@@ -73,12 +73,31 @@ class GameBoard {
     const boardMapStringArr = this.boardMapString.split("");
     this.boardString = boardStringArr
       .map((item, index) => {
-        if (boardMapStringArr[index] === "#" && item === " ") {
-          item = "V";
+        if (item === "#") {
           return item;
         }
-        if (boardMapStringArr[index] === " " && item === "#") {
-          boardMapStringArr[index] = "#";
+        if (item === "*") {
+          boardMapStringArr[index] = "*";
+          return item;
+        }
+        if (boardMapStringArr[index] === "*") {
+          item = "B";
+          boardMapStringArr[index] = "B";
+          return item;
+        }
+        if (boardMapStringArr[index] === "B") {
+          item = "A";
+          boardMapStringArr[index] = "A";
+          return item;
+        }
+        if (boardMapStringArr[index] === "A") {
+          item = 9;
+          boardMapStringArr[index] = 9;
+          return item;
+        }
+        if (boardMapStringArr[index] >= 5 && boardMapStringArr[index] <= 9) {
+          item = boardMapStringArr[index] - 1;
+          boardMapStringArr[index]--;
           return item;
         }
         return item;
@@ -86,6 +105,25 @@ class GameBoard {
       .join("");
     this.boardMapString = boardMapStringArr.join("");
   }
+
+  // showDrillsStatusOnBoardString() {
+  //   const boardStringArr = this.boardString.split("");
+  //   const boardMapStringArr = this.boardMapString.split("");
+  //   this.boardString = boardStringArr
+  //     .map((item, index) => {
+  //       if (boardMapStringArr[index] === "#" && item === " ") {
+  //         item = "V";
+  //         return item;
+  //       }
+  //       if (boardMapStringArr[index] === " " && item === "#") {
+  //         boardMapStringArr[index] = "#";
+  //         return item;
+  //       }
+  //       return item;
+  //     })
+  //     .join("");
+  //   this.boardMapString = boardMapStringArr.join("");
+  // }
 
   setBoardMatrix(boardString) {
     const boardWidth = this.boardWidth;
