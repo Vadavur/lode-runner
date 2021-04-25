@@ -23,8 +23,10 @@ class Hero {
 
   isNotDead(board) {
     const heroPosition = board.myHeroPosition;
-    L.l('heroPosition');
-    const heroItem = board.getBoardItemInPosition(heroPosition[0], heroPosition[1]);
+    const heroItem = board.getBoardItemInPosition(
+      heroPosition[0],
+      heroPosition[1]
+    );
     if (heroItem === "Ѡ" || heroItem === "x") {
       return false;
     }
@@ -32,12 +34,11 @@ class Hero {
   }
 
   executeOrder() {
-    if (this.order.length !== 0) {
+    if (this.order.length === 1) {
+      this.onMission = false;
       return this.order.dequeue()[0];
     } else {
-      L.l("!!!!!!!!!!!!!!!!!!!!!!!!");
-      this.onMission = false;
-      return "stop";
+      return this.order.dequeue()[0];
     }
   }
 }
