@@ -5,7 +5,6 @@ class L {
   }
 }
 
-// activates btn to clear logs
 
 // activates keabord control for testing
 class KeyboardController {
@@ -144,6 +143,8 @@ class Observer {
   }
 }
 
+
+// Not this time...
 // class PathsTree {
 //   constructor(myHeroPosition) {
 //     this.from = null;

@@ -13,7 +13,6 @@ class Routes {
     paths[0] = new Queue();
     paths[0].enqueue(["stop", myHeroPosition]);
     const visitedCells = [myHeroPosition];
-    let counter = 0;
 
     while (!gotPlan) {
       paths.forEach((directionsQueue, index) => {
@@ -181,7 +180,6 @@ class Routes {
           paths.splice(index, 1);
         }
       });
-      counter++;
     }
     return getTheBestPath(bestPaths);
     // if (bestPaths.length > 1) {}
