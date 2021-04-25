@@ -1,7 +1,7 @@
 class Hero {
   constructor() {
     this.order = [];
-    this.onMission = false;
+    this.isBusy = false;
     this.commandsList = {
       GO_LEFT: "left",
       GO_RIGHT: "right",
@@ -16,9 +16,9 @@ class Hero {
   }
 
   getOrder(order) {
-    if (this.onMission) return;
+    if (this.isBusy) return;
     this.order = order;
-    this.onMission = true;
+    this.isBusy = true;
   }
 
   isNotDead(board) {
@@ -28,6 +28,7 @@ class Hero {
       heroPosition[1]
     );
     if (heroItem === "Ѡ" || heroItem === "x") {
+      this.isBusy = false;
       return false;
     }
     return true;
@@ -35,7 +36,7 @@ class Hero {
 
   executeOrder() {
     if (this.order.length === 1) {
-      this.onMission = false;
+      this.isBusy = false;
       return this.order.dequeue()[0];
     } else {
       return this.order.dequeue()[0];

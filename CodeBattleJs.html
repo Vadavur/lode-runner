@@ -53,14 +53,14 @@
       const orderGiver = new OrderGiver();
       const hero = new Hero();
       const keyboardControllerOn = new KeyboardController();
-      L.l("OOOOkkkkkkk0");
+      L.l("initGame");
 
       gcb.textArea = text;
 
       gcb.run(function (board) {
         observer.nextStep();
 
-        L.l("OOOOkkkkkkk1");
+        L.l("turn");
         if (gameBoard.initialBoard == "") {
           gameBoard.initializeBoard(board);
         }
@@ -71,16 +71,11 @@
 
         orderGiver.takeBoard(gameBoard);
 
-        if (!hero.onMission) orderGiver.formOrder();
+        if (!hero.isBusy) orderGiver.formOrder();
         hero.getOrder(orderGiver.order);
+        
         L.l(hero.order.size);
-        L.l(hero.onMission);
 
-        if (hero.isNotDead(gameBoard)) {
-          L.l("!!!!!!!!!!!!!!!");
-        }
-
-        // return hero.executeOrder();
         return hero.isNotDead(gameBoard) ? hero.executeOrder() : "dead";
         // return keyboardControllerOn.releaseCommand();
       });

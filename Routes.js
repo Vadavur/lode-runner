@@ -27,6 +27,40 @@ class Routes {
           currentPlaceX
         );
 
+        if (directionsQueue.tail.value[2] !== undefined) {
+          if (directionsQueue.tail.value[2] === 1) {
+            L.l("++++++++++++++++++++++++++++");
+            if (directionsQueue.tail.value[0] === "act,left") {
+              directionsQueue.enqueue([
+                "left",
+                directionsQueue.tail.value[1],
+                2,
+              ]);
+            }
+            if (directionsQueue.tail.value[0] === "act,left") {
+              directionsQueue.enqueue([
+                "right",
+                directionsQueue.tail.value[1],
+                2,
+              ]);
+            }
+            gotDirection = true;
+            return;
+          }
+
+          if (directionsQueue.tail.value[2] === 2) {
+            directionsQueue.enqueue(["down", directionsQueue.tail.value[1]], 3);
+            gotDirection = true;
+            return;
+          }
+
+          if (directionsQueue.tail.value[2] === 3) {
+            directionsQueue.enqueue(["down", directionsQueue.tail.value[1]]);
+            gotDirection = true;
+            return;
+          }
+        }
+
         if (goldString.indexOf(currentPositionItem) !== -1) {
           bestPaths.push([directionsQueue, currentPositionItem]);
           gotPlan = true;
@@ -53,7 +87,6 @@ class Routes {
           const nextPosition = [currentPlaceY, currentPlaceX + 1];
           if (!includesThisArr(visitedCells, nextPosition)) {
             visitedCells.push(nextPosition);
-
             if (gotDirection) {
               const newPath = duplicateQueue(directionsQueue);
               newPath.tail.value = ["right", nextPosition];
@@ -94,6 +127,37 @@ class Routes {
             }
           }
         }
+
+        if (canDrillLeft(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY - 2, currentPlaceX - 1];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["act,left", nextPosition];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["act,left", nextPosition, 1]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (canDrillRight(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY - 2, currentPlaceX + 1];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["act,right", nextPosition];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["act,right", nextPosition, 1]);
+              gotDirection = true;
+            }
+          }
+        }
+
         if (!gotDirection) {
           paths.splice(index, 1);
         }
@@ -184,6 +248,34 @@ function canGoUp(currentPlaceHero, board) {
     (board.getMapItemInPosition(Y + 1, X) == "H" ||
       board.getMapItemInPosition(Y + 1, X) == " " ||
       board.getMapItemInPosition(Y + 1, X) == "~")
+  ) {
+    return true;
+  }
+}
+
+function canDrillLeft(currentPlaceHero, board) {
+  const Y = currentPlaceHero[0];
+  const X = currentPlaceHero[1];
+  if (
+    board.getMapItemInPosition(Y, X - 1) == " " &&
+    board.getMapItemInPosition(Y - 1, X - 1) == "#" &&
+    (board.getMapItemInPosition(Y - 2, X - 1) == " " ||
+      board.getMapItemInPosition(Y - 2, X - 1) == "H" ||
+      board.getMapItemInPosition(Y - 2, X - 1) == "~")
+  ) {
+    return true;
+  }
+}
+
+function canDrillRight(currentPlaceHero, board) {
+  const Y = currentPlaceHero[0];
+  const X = currentPlaceHero[1];
+  if (
+    board.getMapItemInPosition(Y, X + 1) == " " &&
+    board.getMapItemInPosition(Y - 1, X + 1) == "#" &&
+    (board.getMapItemInPosition(Y - 2, X + 1) == " " ||
+      board.getMapItemInPosition(Y - 2, X + 1) == "H" ||
+      board.getMapItemInPosition(Y - 2, X + 1) == "~")
   ) {
     return true;
   }

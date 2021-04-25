@@ -55,7 +55,6 @@ class KeyboardController {
         default:
           break;
       }
-      L.l(command);
       this.keyboardCommand.enqueue(command);
       return;
     });
