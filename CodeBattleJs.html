@@ -49,28 +49,40 @@
         "https://dojorena.io/codenjoy-contest/board/player/dojorena306?code=8752013741028701087&gameName=loderunner"
       );
       const gameBoard = new GameBoard();
+      const observer = new Observer();
       const orderGiver = new OrderGiver();
       const hero = new Hero();
       const keyboardControllerOn = new KeyboardController();
-      const observer = new Observer();
-      
+      L.l("OOOOkkkkkkk0");
+
       gcb.textArea = text;
-      
+
       gcb.run(function (board) {
-        // L.l("OOOOkkkkkkk");
         observer.nextStep();
-        
+
+        L.l("OOOOkkkkkkk1");
         if (gameBoard.initialBoard == "") {
           gameBoard.initializeBoard(board);
         }
-        gameBoard.refreshBoard(board);
+        gameBoard.actualizeBoard(board);
+
         document.getElementById("board-view-panel").innerHTML =
           gameBoard.colorizedBoardMatrixString;
 
+        orderGiver.takeBoard(gameBoard);
+
         if (!hero.onMission) orderGiver.formOrder();
         hero.getOrder(orderGiver.order);
-        return keyboardControllerOn.releaseCommand();
-        // return hero.executeOrders();
+        L.l(hero.order.size);
+        L.l(hero.onMission);
+
+        if (hero.isNotDead(gameBoard)) {
+          L.l("!!!!!!!!!!!!!!!");
+        }
+
+        // return hero.executeOrder();
+        return hero.isNotDead(gameBoard) ? hero.executeOrder() : "stop";
+        // return keyboardControllerOn.releaseCommand();
       });
     </script>
   </body>

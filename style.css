@@ -1,3 +1,9 @@
+@font-face {
+  font-family: Monoid-Regular;
+  src: url(Monoid-Regular.ttf);
+  /* well, it still sucks */
+}
+
 .game-monitor__container {
   display: flex;
   height: 100%;

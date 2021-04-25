@@ -14,6 +14,7 @@ class OrderGiver {
       SUICIDE: "act(0)",
       DO_NOTHING: "stop",
     };
+    this.inProcess = false;
   }
 
   takeBoard(board) {
@@ -21,18 +22,9 @@ class OrderGiver {
   }
 
   formOrder() {
-    // this.orders = ["right", "act,right", "right"];
-    this.order = [
-      "left",
-      "left",
-      "left",
-      "left",
-      "left",
-      "left",
-      "left",
-      "up",
-      "up",
-      "right",
-    ].reverse();
+    this.inProcess = true;
+    const routes = new Routes(this.board);
+    this.order = routes.getPath();
+    this.inProcess = false;
   }
 }

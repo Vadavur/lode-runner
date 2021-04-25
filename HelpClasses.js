@@ -142,7 +142,6 @@ class Observer {
   }
 }
 
-
 // class PathsTree {
 //   constructor(myHeroPosition) {
 //     this.from = null;

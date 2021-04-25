@@ -21,17 +21,15 @@ class GameBoard {
     this.boardHeight = this.setBoardHeight();
     this.boardMapString = this.setBoardMapString();
     this.boardMapMatrix = this.setBoardMatrix(this.boardMapString);
-    // L.l("OOOOkkkkkkk");
   }
 
-  refreshBoard(board) {
+  actualizeBoard(board) {
     this.boardString = board._boardString;
     this.showDrillsStatusOnBoardString();
     this.boardMatrix = this.setBoardMatrix(this.boardString);
     this.boardMatrixString = this.setBoardMatrixString();
     this.myHeroPosition = this.getMyHeroPosition();
     this.colorizedBoardMatrixString = this.getColorizedBoardMatrixString();
-    L.l(this.myHeroPosition);
   }
 
   setBoardWidth() {
@@ -61,6 +59,10 @@ class GameBoard {
         if (brickSymbolsSet.includes(item) || item === "☼") {
           return item;
         }
+        if (item === "⊛") {
+          item = "O";
+          return item;
+        }
 
         item = " ";
         return item;
@@ -81,24 +83,24 @@ class GameBoard {
           return item;
         }
         if (boardMapStringArr[index] === "*") {
-          item = "B";
           boardMapStringArr[index] = "B";
-          return item;
+          return "B";
         }
         if (boardMapStringArr[index] === "B") {
-          item = "A";
           boardMapStringArr[index] = "A";
-          return item;
+          return "A";
         }
         if (boardMapStringArr[index] === "A") {
-          item = 9;
           boardMapStringArr[index] = 9;
-          return item;
+          return 9;
         }
         if (boardMapStringArr[index] >= 5 && boardMapStringArr[index] <= 9) {
           item = boardMapStringArr[index] - 1;
           boardMapStringArr[index]--;
           return item;
+        }
+        if (item === "⊛") {
+          return "O";
         }
         return item;
       })
@@ -182,7 +184,7 @@ class GameBoard {
 
     colorizedBoardArray = colorizeSymbols("☼", "", "#102200");
     colorizedBoardArray = colorizeSymbols("#", "", "grey");
-    colorizedBoardArray = colorizeSymbols("⊛", "", "purple");
+    colorizedBoardArray = colorizeSymbols("O", "", "purple");
     colorizedBoardArray = colorizeSymbols("S", "", "blue");
 
     function colorizeSymbols(symbolsSet, color, bgColor) {
@@ -203,6 +205,6 @@ class GameBoard {
   }
 
   getMapItemInPosition(coordY, coordX) {
-    return this.boardMatrix[coordY][coordX];
+    return this.boardMapMatrix[coordY][coordX];
   }
 }

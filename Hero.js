@@ -18,16 +18,27 @@ class Hero {
   getOrder(order) {
     if (this.onMission) return;
     this.order = order;
-    this.onMission = true;    
-  }
-  
-  missionCompleted() {
-    this.onMission = false;
-    return "stop";
+    this.onMission = true;
   }
 
-  executeOrders() {
-    return this.order.pop() || this.missionCompleted();
+  isNotDead(board) {
+    const heroPosition = board.myHeroPosition;
+    L.l('heroPosition');
+    const heroItem = board.getBoardItemInPosition(heroPosition[0], heroPosition[1]);
+    if (heroItem === "Ѡ" || heroItem === "x") {
+      return false;
+    }
+    return true;
+  }
+
+  executeOrder() {
+    if (this.order.length !== 0) {
+      return this.order.dequeue()[0];
+    } else {
+      L.l("!!!!!!!!!!!!!!!!!!!!!!!!");
+      this.onMission = false;
+      return "stop";
+    }
   }
 }
 
@@ -36,7 +47,6 @@ class Hero {
 // canMoveUp
 // canMoveDown
 // falling
-
 
 // 4
 // 3
