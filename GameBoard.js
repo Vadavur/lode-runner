@@ -3,13 +3,13 @@ class GameBoard {
     this.boardSymbols = new Map([
       ["ladderSymbolsSet", "HY⍬U⋕⋊Q"],
       ["pipeSymbolsSet", "~{}⋜⋝ЭЄ⊣⊢<>"],
-      ["brickSymbolsSet", "#*X123456789ABVW"],
+      ["brickSymbolsSet", "#*X123456789ABᵇᵃ⁹⁸⁷⁶⁵⁴³²¹"],
       ["environmentSymbolsSet", " #H~☼"],
-      ["heroSymbolsSet", "ѠЯRY◄►[]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝"],
+      ["heroSymbolsSet", "ѠЯRY◄►[]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝ᵇᵃ⁹⁸⁷⁶⁵⁴³²¹"],
       ["goldSymbolsSet", "$&@"],
       ["dangerSymbolsSet", "<>Z⋈⋰⋱⋊⋉⋕⋣⋢⊣⊢Q«»"],
       ["otherHeroSymbolsSet", "⌋⌊U)(⊐⊏ЭЄ"],
-      ["drillSymbolsSet", "*X123456789ABVW"],
+      ["drillSymbolsSet", "*X123456789AB"],
     ]);
     this.initialBoard = "";
   }
@@ -73,6 +73,33 @@ class GameBoard {
   showDrillsStatusOnBoardString() {
     const boardStringArr = this.boardString.split("");
     const boardMapStringArr = this.boardMapString.split("");
+    const brickEmptyDrillsArray = [
+      "ᵇ",
+      "ᵃ",
+      "⁹",
+      "⁸",
+      "⁷",
+      "⁶",
+      "⁵",
+      "⁴",
+      "³",
+      "²",
+      "¹",
+    ];
+    const brickHeroInDrillsArray = [
+      "b",
+      "a",
+      "9",
+      "8",
+      "7",
+      "6",
+      "5",
+      "4",
+      "3",
+      "2",
+      "1",
+    ];
+
     this.boardString = boardStringArr
       .map((item, index) => {
         if (item === "#") {
@@ -82,23 +109,36 @@ class GameBoard {
           boardMapStringArr[index] = "*";
           return item;
         }
-        if (boardMapStringArr[index] === "*") {
-          boardMapStringArr[index] = "B";
-          return "B";
-        }
-        if (boardMapStringArr[index] === "B") {
-          boardMapStringArr[index] = "A";
-          return "A";
-        }
-        if (boardMapStringArr[index] === "A") {
-          boardMapStringArr[index] = 9;
-          return 9;
-        }
-        if (boardMapStringArr[index] >= 5 && boardMapStringArr[index] <= 9) {
-          item = boardMapStringArr[index] - 1;
-          boardMapStringArr[index]--;
-          return item;
-        }
+        // if (boardMapStringArr[index] === "*") {
+        //   boardMapStringArr[index] = "B";
+        //   return "B";
+        // }
+
+        // const checkMapBrick = brickEmptyDrillsArray.indexOf(
+        //   boardMapStringArr[index]
+        // );
+        // const checkBoardBrick = brickEmptyDrillsArray.indexOf(item);
+
+        // if (checkBoardBrick !== -1) {
+        //   if item
+
+        //   boardMapStringArr[index] = "A";
+        //   return "A";
+        // }
+
+        // if (boardMapStringArr[index] === "B") {
+        //   boardMapStringArr[index] = "A";
+        //   return "A";
+        // }
+        // if (boardMapStringArr[index] === "A") {
+        //   boardMapStringArr[index] = 9;
+        //   return 9;
+        // }
+        // if (boardMapStringArr[index] >= 5 && boardMapStringArr[index] <= 9) {
+        //   item = boardMapStringArr[index] - 1;
+        //   boardMapStringArr[index]--;
+        //   return item;
+        // }
         if (item === "⊛") {
           return "O";
         }
@@ -139,7 +179,7 @@ class GameBoard {
     const boardString = this.boardString;
 
     return this.getMatrixYXPositionOf(
-      boardString.search(/[ѠЯRY◄►\[\]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝]/)
+      boardString.search(/[ѠЯRY◄►\[\]{}x⊰⊱⍬⊲⊳⊅⊄⋜⋝V]/)
     );
   }
 
@@ -147,6 +187,12 @@ class GameBoard {
     const yValue = this.boardHeight - Math.ceil(itemIndex / this.boardWidth);
     const xValue = itemIndex % this.boardWidth;
     return [yValue, xValue];
+  }
+
+  getStringIndexPositionOf(Y, X) {
+    return (
+      this.boardString.length - 1 - Y * this.boardWidth + X - this.boardWidth
+    );
   }
 
   getColorizedBoardMatrixString() {

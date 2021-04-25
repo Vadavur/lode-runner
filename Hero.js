@@ -2,6 +2,9 @@ class Hero {
   constructor() {
     this.order = [];
     this.isBusy = false;
+    this.currentPosition;
+    this.previousPosition;
+    this.prePreviousPosition;
     this.commandsList = {
       GO_LEFT: "left",
       GO_RIGHT: "right",
@@ -22,15 +25,21 @@ class Hero {
   }
 
   isNotDead(board) {
-    const heroPosition = board.myHeroPosition;
+    this.prePreviousPosition = this.previousPosition;
+    this.previousPosition = this.currentPosition;
+    this.currentPosition = board.myHeroPosition;
     const heroItem = board.getBoardItemInPosition(
-      heroPosition[0],
-      heroPosition[1]
+      this.currentPosition[0],
+      this.currentPosition[1]
     );
     if (heroItem === "Ѡ" || heroItem === "x") {
       this.isBusy = false;
       return false;
     }
+    // if (this.standsTooLong(this.currentPosition, this.prePreviousPosition)) {
+    //   this.order = [{value : ['stop', ''], next : null}];
+    //   this.isBusy = false;
+    // }
     return true;
   }
 
@@ -41,5 +50,18 @@ class Hero {
     } else {
       return this.order.dequeue()[0];
     }
+  }
+
+  standsTooLong(currentPosition, prePreviousPosition) {
+    if (prePreviousPosition === undefined){
+      return false;
+    }
+    if (
+      currentPosition[0] === prePreviousPosition[0] &&
+      currentPosition[0] === prePreviousPosition[0]
+    ) {
+      return true;
+    }
+    return false;
   }
 }

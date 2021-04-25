@@ -4,7 +4,11 @@ class Routes {
     this.myHeroPosition = board.myHeroPosition;
   }
 
-  getPath() {
+
+// NB!  all of this copypaste CRIME is because of AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+// two hours left!!!!!!!!!!!!!!!!!!!!!!!
+// I'm awfully sorry if you see this...
+  getGoldPath() {
     const paths = [];
     let gotPlan = false;
     const myHeroPosition = this.myHeroPosition;
@@ -20,45 +24,46 @@ class Routes {
         let gotDirection = false;
         const currentPlaceY = currentPlaceHero[0];
         const currentPlaceX = currentPlaceHero[1];
-        // const goldString = board.boardSymbols.get("goldSymbolsSet");
         const goldString = "$&@";
         const currentPositionItem = board.getBoardItemInPosition(
           currentPlaceY,
           currentPlaceX
         );
 
-        if (directionsQueue.tail.value[2] !== undefined) {
-          if (directionsQueue.tail.value[2] === 1) {
-            L.l("++++++++++++++++++++++++++++");
-            if (directionsQueue.tail.value[0] === "act,left") {
-              directionsQueue.enqueue([
-                "left",
-                directionsQueue.tail.value[1],
-                2,
-              ]);
-            }
-            if (directionsQueue.tail.value[0] === "act,left") {
-              directionsQueue.enqueue([
-                "right",
-                directionsQueue.tail.value[1],
-                2,
-              ]);
-            }
-            gotDirection = true;
-            return;
-          }
+        if (isBlock(currentPositionItem)){
+          paths.splice(index, 1);
+        }
 
-          if (directionsQueue.tail.value[2] === 2) {
-            directionsQueue.enqueue(["down", directionsQueue.tail.value[1]], 3);
-            gotDirection = true;
-            return;
+        if (directionsQueue.tail.value[2] === 1) {
+          L.l(directionsQueue.tail.value[2] + '  GOOOOOOLD');
+          if (directionsQueue.tail.value[0] === "act,left") {
+            directionsQueue.enqueue(["left", directionsQueue.tail.value[1], 2]);
           }
+          if (directionsQueue.tail.value[0] === "act,left") {
+            directionsQueue.enqueue([
+              "right",
+              directionsQueue.tail.value[1],
+              2,
+            ]);
+          }
+          gotDirection = true;
+          return;
+        }
 
-          if (directionsQueue.tail.value[2] === 3) {
-            directionsQueue.enqueue(["down", directionsQueue.tail.value[1]]);
-            gotDirection = true;
-            return;
-          }
+        if (directionsQueue.tail.value[2] === 2) {
+          directionsQueue.enqueue(["down", directionsQueue.tail.value[1]], 3);
+          gotDirection = true;
+          return;
+        }
+
+        if (directionsQueue.tail.value[2] === 3) {
+          directionsQueue.enqueue(["down", directionsQueue.tail.value[1]]);
+          gotDirection = true;
+          return;
+        }
+
+        if (isBlock(currentPositionItem)){
+          paths.splice(index, 1);
         }
 
         if (goldString.indexOf(currentPositionItem) !== -1) {
@@ -134,7 +139,7 @@ class Routes {
             visitedCells.push(nextPosition);
             if (gotDirection) {
               const newPath = duplicateQueue(directionsQueue);
-              newPath.tail.value = ["act,left", nextPosition];
+              newPath.tail.value = ["act,left", nextPosition, 1];
               paths.push(newPath);
             } else {
               directionsQueue.enqueue(["act,left", nextPosition, 1]);
@@ -149,7 +154,328 @@ class Routes {
             visitedCells.push(nextPosition);
             if (gotDirection) {
               const newPath = duplicateQueue(directionsQueue);
-              newPath.tail.value = ["act,right", nextPosition];
+              newPath.tail.value = ["act,right", nextPosition, 1];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["act,right", nextPosition, 1]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (!gotDirection) {
+          paths.splice(index, 1);
+        }
+      });
+    }
+    return getTheBestPath(bestPaths);
+    // if (bestPaths.length > 1) {}
+  }
+
+  getPortalPath() {
+    const paths = [];
+    let gotPlan = false;
+    const myHeroPosition = this.myHeroPosition;
+    const bestPaths = [];
+    const board = this.board;
+    paths[0] = new Queue();
+    paths[0].enqueue(["stop", myHeroPosition]);
+    const visitedCells = [myHeroPosition];
+
+    while (!gotPlan) {
+      paths.forEach((directionsQueue, index) => {
+        let currentPlaceHero = directionsQueue.tail.value[1];
+        let gotDirection = false;
+        const currentPlaceY = currentPlaceHero[0];
+        const currentPlaceX = currentPlaceHero[1];
+        const portalString = "⊛O";
+        const currentPositionItem = board.getBoardItemInPosition(
+          currentPlaceY,
+          currentPlaceX
+        );
+
+        if (directionsQueue.tail.value[2] === 1) {
+          L.l(directionsQueue.tail.value[2]  + '  PORTAAAAAL');
+          if (directionsQueue.tail.value[0] === "act,left") {
+            directionsQueue.enqueue(["left", directionsQueue.tail.value[1], 2]);
+          }
+          if (directionsQueue.tail.value[0] === "act,left") {
+            directionsQueue.enqueue([
+              "right",
+              directionsQueue.tail.value[1],
+              2,
+            ]);
+          }
+          gotDirection = true;
+          return;
+        }
+
+        if (directionsQueue.tail.value[2] === 2) {
+          directionsQueue.enqueue(["down", directionsQueue.tail.value[1]], 3);
+          gotDirection = true;
+          return;
+        }
+
+        if (directionsQueue.tail.value[2] === 3) {
+          directionsQueue.enqueue(["down", directionsQueue.tail.value[1]]);
+          gotDirection = true;
+          return;
+        }
+
+        if (isBlock(currentPositionItem)){
+          paths.splice(index, 1);
+        }
+
+        if (portalString.indexOf(currentPositionItem) !== -1) {
+          bestPaths.push([directionsQueue, currentPositionItem]);
+          gotPlan = true;
+          return;
+        }
+
+        if (isFalling(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY - 1, currentPlaceX];
+          directionsQueue.enqueue(["down", nextPosition]);
+          gotDirection = true;
+          return;
+        }
+
+        if (canGoLeft(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY, currentPlaceX - 1];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            directionsQueue.enqueue(["left", nextPosition]);
+            gotDirection = true;
+          }
+        }
+
+        if (canGoRight(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY, currentPlaceX + 1];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["right", nextPosition];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["right", nextPosition]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (canGoDown(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY - 1, currentPlaceX];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["down", nextPosition];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["down", nextPosition]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (canGoUp(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY + 1, currentPlaceX];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["up", nextPosition];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["up", nextPosition]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (canDrillLeft(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY - 2, currentPlaceX - 1];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["act,left", nextPosition, 1];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["act,left", nextPosition, 1]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (canDrillRight(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY - 2, currentPlaceX + 1];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["act,right", nextPosition, 1];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["act,right", nextPosition, 1]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (!gotDirection) {
+          paths.splice(index, 1);
+        }
+      });
+    }
+    return getTheBestPath(bestPaths);
+    // if (bestPaths.length > 1) {}
+  }
+  
+  getPillsPath() {
+    const paths = [];
+    let gotPlan = false;
+    const myHeroPosition = this.myHeroPosition;
+    const bestPaths = [];
+    const board = this.board;
+    paths[0] = new Queue();
+    paths[0].enqueue(["stop", myHeroPosition]);
+    const visitedCells = [myHeroPosition];
+
+    while (!gotPlan) {
+      paths.forEach((directionsQueue, index) => {
+        let currentPlaceHero = directionsQueue.tail.value[1];
+        let gotDirection = false;
+        const currentPlaceY = currentPlaceHero[0];
+        const currentPlaceX = currentPlaceHero[1];
+        const pillsString = "S";
+        const currentPositionItem = board.getBoardItemInPosition(
+          currentPlaceY,
+          currentPlaceX
+        );
+
+        
+        if (directionsQueue.tail.value[2] === 1) {
+          L.l(directionsQueue.tail.value[2]  + '  PIIIIIIILSSSS');
+          if (directionsQueue.tail.value[0] === "act,left") {
+            directionsQueue.enqueue(["left", directionsQueue.tail.value[1], 2]);
+          }
+          if (directionsQueue.tail.value[0] === "act,left") {
+            directionsQueue.enqueue([
+              "right",
+              directionsQueue.tail.value[1],
+              2,
+            ]);
+          }
+          gotDirection = true;
+          return;
+        }
+
+        if (directionsQueue.tail.value[2] === 2) {
+          directionsQueue.enqueue(["down", directionsQueue.tail.value[1]], 3);
+          gotDirection = true;
+          return;
+        }
+
+        if (directionsQueue.tail.value[2] === 3) {
+          directionsQueue.enqueue(["down", directionsQueue.tail.value[1]]);
+          gotDirection = true;
+          return;
+        }
+
+        if (isBlock(currentPositionItem)){
+          paths.splice(index, 1);
+        }
+
+        if (pillsString.indexOf(currentPositionItem) !== -1) {
+          bestPaths.push([directionsQueue, currentPositionItem]);
+          gotPlan = true;
+          return;
+        }
+
+        if (isFalling(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY - 1, currentPlaceX];
+          directionsQueue.enqueue(["down", nextPosition]);
+          gotDirection = true;
+          return;
+        }
+
+        if (canGoLeft(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY, currentPlaceX - 1];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            directionsQueue.enqueue(["left", nextPosition]);
+            gotDirection = true;
+          }
+        }
+
+        if (canGoRight(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY, currentPlaceX + 1];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["right", nextPosition];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["right", nextPosition]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (canGoDown(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY - 1, currentPlaceX];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["down", nextPosition];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["down", nextPosition]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (canGoUp(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY + 1, currentPlaceX];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["up", nextPosition];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["up", nextPosition]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (canDrillLeft(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY - 2, currentPlaceX - 1];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["act,left", nextPosition, 1];
+              paths.push(newPath);
+            } else {
+              directionsQueue.enqueue(["act,left", nextPosition, 1]);
+              gotDirection = true;
+            }
+          }
+        }
+
+        if (canDrillRight(currentPlaceHero, board)) {
+          const nextPosition = [currentPlaceY - 2, currentPlaceX + 1];
+          if (!includesThisArr(visitedCells, nextPosition)) {
+            visitedCells.push(nextPosition);
+            if (gotDirection) {
+              const newPath = duplicateQueue(directionsQueue);
+              newPath.tail.value = ["act,right", nextPosition, 1];
               paths.push(newPath);
             } else {
               directionsQueue.enqueue(["act,right", nextPosition, 1]);
@@ -277,6 +603,13 @@ function canDrillRight(currentPlaceHero, board) {
       board.getMapItemInPosition(Y - 2, X + 1) == "H" ||
       board.getMapItemInPosition(Y - 2, X + 1) == "~")
   ) {
+    return true;
+  }
+}
+
+function isBlock(currentPositionItem) {
+  const blockString = "<>Z⋈⋰⋱⋊⋉⋕⋣⋢⊣⊢Q«»⌋⌊U)(⊐⊏ЭЄ";
+  if (blockString.indexOf(currentPositionItem) !== -1) {
     return true;
   }
 }
