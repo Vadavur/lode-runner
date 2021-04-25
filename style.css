@@ -1,0 +1,60 @@
+@font-face {
+  font-family: Monoid-Regular;
+  src: url(Monoid-Regular.ttf);
+  /* well, it still sucks */
+}
+
+.game-monitor__container {
+  display: flex;
+  height: 100%;
+}
+
+.game-monitor__order-panel {
+  display: inline-block;
+  width: 15%;
+  height: 100%;
+  resize: none;
+}
+
+.game-monitor__board-view-panel {
+  width: 40%;
+  height: 100%;
+  margin: 0 10px;
+  padding: 2px;
+  border: 1px solid lightgray;
+  font-family: monospace;
+  font-size: 1em;
+  line-height: 1.15em;
+  white-space: pre;
+}
+
+.game-monitor__side-panels {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
+.game-monitor__help-panel {
+  display: inline-block;
+  width: 100%;
+  height: 20%;
+  resize: none;
+  margin: 0 10px 5px;
+}
+
+.game-monitor__log-panel {
+  display: inline-block;
+  width: 100%;
+  height: 80%;
+  resize: none;
+  margin: 5px 10px;
+  font-size: 0.8em;
+  line-height: 0.9em;
+}
+
+.game-monitor__btn_clear_log{
+  width: 100px;
+  height: 25px; 
+  justify-self: right;
+  margin: 5px 10px;
+}

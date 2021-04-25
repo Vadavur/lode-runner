@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TEST</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="Elements.js"></script>
+    <script src="Point.js"></script>
+    <script src="Utils.js"></script>
+    <script src="GameClient.js"></script>
+    <script src="LoderunnerBoard.js"></script>
+    <script src="HelpClasses.js"></script>
+    <script src="GameBoard.js"></script>
+    <script src="OrderGiver.js"></script>
+    <script src="Routes.js"></script>
+    <script src="Hero.js"></script>
+  </head>
+
+  <body id="body">
+    <div class="game-monitor__container" style="display: flex; height: 100%">
+      <textarea
+        class="game-monitor__order-panel"
+        id="text"
+        readonly="true"
+      ></textarea>
+      <p class="game-monitor__board-view-panel" id="board-view-panel"></p>
+      <div class="game-monitor__side-panels">
+        <textarea
+          class="game-monitor__help-panel"
+          id="help-panel"
+          readonly="true"
+        ></textarea>
+        <button
+          class="game-monitor__btn_clear_log"
+          id="btn_clear_log"
+          type="button"
+        >
+          Clear all logs
+        </button>
+        <textarea
+          class="game-monitor__log-panel"
+          id="log-panel"
+          readonly="true"
+        ></textarea>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      var gcb = new GameClient(
+        "https://dojorena.io/codenjoy-contest/board/player/dojorena306?code=8752013741028701087&gameName=loderunner"
+      );
+      const gameBoard = new GameBoard();
+      const observer = new Observer();
+      const orderGiver = new OrderGiver();
+      const hero = new Hero();
+      const keyboardControllerOn = new KeyboardController();
+      L.l("initGame");
+
+      gcb.textArea = text;
+
+      gcb.run(function (board) {
+        observer.nextStep();
+
+        L.l("turn");
+        if (gameBoard.initialBoard == "") {
+          gameBoard.initializeBoard(board);
+        }
+        gameBoard.actualizeBoard(board);
+
+        document.getElementById("board-view-panel").innerHTML =
+          gameBoard.colorizedBoardMatrixString;
+
+        orderGiver.takeBoard(gameBoard);
+
+        if (!hero.isBusy) orderGiver.formOrder();
+        hero.getOrder(orderGiver.order);
+        
+        L.l(hero.order.size);
+
+        return hero.isNotDead(gameBoard) ? hero.executeOrder() : "dead";
+        // return keyboardControllerOn.releaseCommand();
+      });
+    </script>
+  </body>
+</html>
