@@ -13,8 +13,12 @@ class Routes {
     paths[0] = new Queue();
     paths[0].enqueue(["stop", myHeroPosition]);
     const visitedCells = [myHeroPosition];
+    let counter = 0;
 
     while (!gotPlan) {
+      if (counter >= 70){
+        break;
+      }
       paths.forEach((directionsQueue, index) => {
         let currentPlaceHero = directionsQueue.tail.value[1];
         let gotDirection = false;
@@ -174,7 +178,7 @@ class Routes {
             }
           }
         }
-
+        counter++;
         if (!gotDirection) {
           paths.splice(index, 1);
         }
@@ -206,10 +210,6 @@ function getTheBestPath(bestPaths) {
   }
   return bestPaths[0][0];
 }
-
-// ('@') +5 RED_GOLD
-// ('$') +3 YELLOW_GOLD
-// ('&') +1 GREEN_GOLD
 
 function isFalling(currentPlaceHero, board) {
   const Y = currentPlaceHero[0];
