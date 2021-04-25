@@ -13,6 +13,7 @@ class Routes {
     paths[0] = new Queue();
     paths[0].enqueue(["stop", myHeroPosition]);
     const visitedCells = [myHeroPosition];
+    let counter = 0;
 
     while (!gotPlan) {
       paths.forEach((directionsQueue, index) => {
@@ -28,9 +29,11 @@ class Routes {
         );
 
         let thingsToGetString = "$&@S";
+        let dangersToAvoidString = "⌋⌊U)(⊐⊏ЭЄ<>Z⋈⋰⋱⋊⋉⋕⋣⋢⊣⊢Q«»";
 
         if ("⊰⊱⍬⊲⊳⊅⊄⋜⋝".indexOf(currentHeroType) !== -1) {
           thingsToGetString = "$&@";
+          dangersToAvoidString = "";
         }
 
         const currentPositionItem = board.getBoardItemInPosition(
@@ -75,6 +78,11 @@ class Routes {
         if (thingsToGetString.indexOf(currentPositionItem) !== -1) {
           bestPaths.push([directionsQueue, currentPositionItem]);
           gotPlan = true;
+          return;
+        }
+
+        if (dangersToAvoidString.indexOf(currentPositionItem) !== -1) {
+          paths.splice(index, 1);
           return;
         }
 
@@ -173,6 +181,7 @@ class Routes {
           paths.splice(index, 1);
         }
       });
+      counter++;
     }
     return getTheBestPath(bestPaths);
     // if (bestPaths.length > 1) {}
@@ -195,6 +204,9 @@ function getTheBestPath(bestPaths) {
   // bestPaths.forEach((item) => item[0])
   bestPaths[0][0].head = bestPaths[0][0].head.next;
   bestPaths[0][0].length--;
+  if (bestPaths[0] === undefined) {
+    return ["act(0)", "act(0)"];
+  }
   return bestPaths[0][0];
 }
 

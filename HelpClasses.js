@@ -129,6 +129,9 @@ class Observer {
   }
 
   nextStep() {
+    if (this.counter >= 80) {
+      this.startObserving();
+    }
     this.counter++;
     document.getElementById("help-panel").value = this.counter;
     L.l(`\n---------------------------------------------- ${this.counter}`);
