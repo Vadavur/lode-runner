@@ -26,7 +26,8 @@ class Routes {
           currentPlaceY,
           currentPlaceX
         );
-        if (goldString.search(currentPositionItem) !== -1) {
+
+        if (goldString.indexOf(currentPositionItem) !== -1) {
           bestPaths.push([directionsQueue, currentPositionItem]);
           gotPlan = true;
           return;
