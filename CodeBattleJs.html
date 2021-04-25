@@ -71,7 +71,7 @@
 
         orderGiver.takeBoard(gameBoard);
 
-        if (!hero.isBusy) orderGiver.formOrder();
+        if (!hero.isBusy || hero.isStanding(gameBoard)) orderGiver.formOrder();
         hero.getOrder(orderGiver.order);
         
         L.l(hero.order.size);

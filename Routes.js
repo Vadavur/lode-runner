@@ -28,11 +28,11 @@ class Routes {
         );
 
         let thingsToGetString = "$&@S";
-        let dangersToAvoidString = "⌋⌊U)(⊐⊏ЭЄ<>Z⋈⋰⋱⋊⋉⋕⋣⋢⊣⊢Q«»";
+        let thingsToAvoidString = "⌋⌊U)(⊐⊏ЭЄ<>Z⋈⋰⋱⋊⋉⋕⋣⋢⊣⊢Q«»";
 
         if ("⊰⊱⍬⊲⊳⊅⊄⋜⋝".indexOf(currentHeroType) !== -1) {
-          thingsToGetString = "$&@";
-          dangersToAvoidString = "";
+          thingsToGetString = "$&@⌋⌊U)(⊐⊏ЭЄ";
+          thingsToAvoidString = "";
         }
 
         const currentPositionItem = board.getBoardItemInPosition(
@@ -42,7 +42,6 @@ class Routes {
 
         if (directionsQueue.tail.value[2] !== undefined) {
           if (directionsQueue.tail.value[2] === 1) {
-            L.l("++++++++++++++++++++++++++++");
             if (directionsQueue.tail.value[0] === "act,left") {
               directionsQueue.enqueue([
                 "left",
@@ -80,7 +79,7 @@ class Routes {
           return;
         }
 
-        if (dangersToAvoidString.indexOf(currentPositionItem) !== -1) {
+        if (thingsToAvoidString.indexOf(currentPositionItem) !== -1) {
           paths.splice(index, 1);
           return;
         }

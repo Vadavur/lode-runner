@@ -2,17 +2,7 @@ class Hero {
   constructor() {
     this.order = [];
     this.isBusy = false;
-    this.commandsList = {
-      GO_LEFT: "left",
-      GO_RIGHT: "right",
-      GO_UP: "up",
-      GO_DOWN: "down",
-      DRILL_LEFT: "act,left",
-      DRILL_RIGHT: "act,right",
-      DRILL: "act",
-      SUICIDE: "act(0)",
-      DO_NOTHING: "stop",
-    };
+    this.heroPreviousPosition = [];
   }
 
   getOrder(order) {
@@ -32,6 +22,22 @@ class Hero {
       return false;
     }
     return true;
+  }
+
+  isStanding(board) {
+    const heroPosition = board.myHeroPosition;
+    if (this.heroPreviousPosition[0] === undefined) {
+      this.heroPreviousPosition.push([heroPosition[0], heroPosition[1]]);
+      return false;
+    }
+
+    if (
+      this.heroPreviousPosition[0] === heroPosition[0] &&
+      this.heroPreviousPosition[1] === heroPosition[1]
+    ) {
+      return true;
+    }
+    return false;
   }
 
   executeOrder() {
