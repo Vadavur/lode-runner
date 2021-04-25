@@ -78,27 +78,27 @@ class GameBoard {
         if (item === "#") {
           return item;
         }
-        if (item === "*") {
-          boardMapStringArr[index] = "*";
-          return item;
-        }
-        if (boardMapStringArr[index] === "*") {
-          boardMapStringArr[index] = "B";
-          return "B";
-        }
-        if (boardMapStringArr[index] === "B") {
-          boardMapStringArr[index] = "A";
-          return "A";
-        }
-        if (boardMapStringArr[index] === "A") {
-          boardMapStringArr[index] = 9;
-          return 9;
-        }
-        if (boardMapStringArr[index] >= 5 && boardMapStringArr[index] <= 9) {
-          item = boardMapStringArr[index] - 1;
-          boardMapStringArr[index]--;
-          return item;
-        }
+        // if (item === "*") {
+        //   boardMapStringArr[index] = "*";
+        //   return item;
+        // }
+        // if (boardMapStringArr[index] === "*") {
+        //   boardMapStringArr[index] = "B";
+        //   return "B";
+        // }
+        // if (boardMapStringArr[index] === "B") {
+        //   boardMapStringArr[index] = "A";
+        //   return "A";
+        // }
+        // if (boardMapStringArr[index] === "A") {
+        //   boardMapStringArr[index] = 9;
+        //   return 9;
+        // }
+        // if (boardMapStringArr[index] >= 5 && boardMapStringArr[index] <= 9) {
+        //   item = boardMapStringArr[index] - 1;
+        //   boardMapStringArr[index]--;
+        //   return item;
+        // }
         if (item === "⊛") {
           return "O";
         }

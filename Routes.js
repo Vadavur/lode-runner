@@ -20,8 +20,19 @@ class Routes {
         let gotDirection = false;
         const currentPlaceY = currentPlaceHero[0];
         const currentPlaceX = currentPlaceHero[1];
-        // const goldString = board.boardSymbols.get("goldSymbolsSet");
-        const goldString = "$&@";
+        // const thingsToGetString = board.boardSymbols.get("goldSymbolsSet");
+
+        const currentHeroType = board.getBoardItemInPosition(
+          myHeroPosition[0],
+          myHeroPosition[1]
+        );
+
+        let thingsToGetString = "$&@S";
+
+        if ("⊰⊱⍬⊲⊳⊅⊄⋜⋝".indexOf(currentHeroType) !== -1) {
+          thingsToGetString = "$&@";
+        }
+
         const currentPositionItem = board.getBoardItemInPosition(
           currentPlaceY,
           currentPlaceX
@@ -61,7 +72,7 @@ class Routes {
           }
         }
 
-        if (goldString.indexOf(currentPositionItem) !== -1) {
+        if (thingsToGetString.indexOf(currentPositionItem) !== -1) {
           bestPaths.push([directionsQueue, currentPositionItem]);
           gotPlan = true;
           return;
@@ -134,7 +145,7 @@ class Routes {
             visitedCells.push(nextPosition);
             if (gotDirection) {
               const newPath = duplicateQueue(directionsQueue);
-              newPath.tail.value = ["act,left", nextPosition];
+              newPath.tail.value = ["act,left", nextPosition, 1];
               paths.push(newPath);
             } else {
               directionsQueue.enqueue(["act,left", nextPosition, 1]);
@@ -149,7 +160,7 @@ class Routes {
             visitedCells.push(nextPosition);
             if (gotDirection) {
               const newPath = duplicateQueue(directionsQueue);
-              newPath.tail.value = ["act,right", nextPosition];
+              newPath.tail.value = ["act,right", nextPosition, 1];
               paths.push(newPath);
             } else {
               directionsQueue.enqueue(["act,right", nextPosition, 1]);
